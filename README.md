@@ -1,4 +1,4 @@
-# hermes-agent-docker
+# hermes-agent-sbx
 
 Minimal Docker image packaging for [Hermes Agent](https://github.com/NousResearch/hermes-agent) to be run in docker sandbox (sbx).
 
