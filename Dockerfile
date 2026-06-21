@@ -21,13 +21,13 @@ WORKDIR /home/agent
 RUN curl -fsSL "https://raw.githubusercontent.com/NousResearch/hermes-agent/${HERMES_REF}/scripts/install.sh" \
     | bash -s -- --skip-setup --branch "${HERMES_REF}" --dir /home/agent/hermes-agent
 
-RUN NPM_CONFIG_PREFIX=/home/agent/.local npm install -g @openai/codex@${CODEX_VERSION}
+#RUN NPM_CONFIG_PREFIX=/home/agent/.local npm install -g @openai/codex@${CODEX_VERSION}
 
 RUN cd /home/agent/hermes-agent \
     && (npm audit fix >/dev/null || [ $? -eq 1 ])
 
-RUN cd /home/agent/hermes-agent/scripts/whatsapp-bridge \
-    && (npm audit fix >/dev/null || [ $? -eq 1 ])
+#RUN cd /home/agent/hermes-agent/scripts/whatsapp-bridge \
+#    && (npm audit fix >/dev/null || [ $? -eq 1 ])
 
 RUN HERMES_HOME=/home/agent/.hermes HOME=/home/agent hermes skills list >/dev/null
 
