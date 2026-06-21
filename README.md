@@ -1,6 +1,6 @@
 # hermes-agent-docker
 
-Minimal Docker image packaging for [Hermes Agent](https://github.com/NousResearch/hermes-agent).
+Minimal Docker image packaging for [Hermes Agent](https://github.com/NousResearch/hermes-agent) to be run in docker sandbox (sbx).
 
 ## Image contents
 
@@ -30,37 +30,33 @@ docker build \
 
 `HERMES_REF` defaults to `main` and can point to either a branch or a tag.
 
+Export build image to tar
+```bash
+docker image save hermes-agent-docker:local \
+  -o hermes-agent-docker.tar```
+```
+
+Import tar as template
+```bash
+sbx template load hermes-agent-docker.tar
+```
+
 ### Run Hermes
 
-Mount two paths:
-- your current project into `/home/agent/workspace`
-- a persistent Hermes home directory into `/home/agent/.hermes`
+
+### First time creation of sandbox
 
 ```bash
-docker run --rm -it \
-  -v "$PWD:/home/agent/workspace" \
-  -v "$HOME/.hermes:/home/agent/.hermes" \
-  hermes-agent-docker:local \
-  hermes
+mkdir -p $HOME/.local/hermes
+cd $HOME/.local/hermes
+sbx run --template hermes-agent-docker:local shell
 ```
 
-### Run doctor
-
+### Later runs
 ```bash
-docker run --rm \
-  -v "$HOME/.hermes:/home/agent/.hermes" \
-  hermes-agent-docker:local \
-  hermes doctor
+sbx run shell-hermes
 ```
-
-## Persistence
-
-Hermes stores config, sessions, memories, and related state in `/home/agent/.hermes` inside the container. Mount that path to keep state across runs.
-
-On first start with an empty mounted `/home/agent/.hermes`, the container seeds that directory from image-prepared Hermes defaults before launching the requested command.
-
-If you do not mount `/home/agent/.hermes`, Hermes will still start, but its state will be lost when the container exits.
 
 ## Environment and setup
 
-Run `hermes setup` inside the container and persist `/home/agent/.hermes`, or place the expected config files inside that mounted directory.
+Run `hermes setup` inside the sandbox
